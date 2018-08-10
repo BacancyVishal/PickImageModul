@@ -1,5 +1,6 @@
 package com.example.vishal.testdemo;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -10,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
@@ -176,4 +178,34 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
+    public void showProgressDialog() {
+        hideProgressDialog();
+        mProgressDialog = showLoadingDialog(BaseActivity.this);
+    }
+
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.cancel();
+        }
+    }
+
+    private static ProgressDialog showLoadingDialog(Context context) {
+        if (context != null) {
+            ProgressDialog progressDialog = new ProgressDialog(context);
+            if (!((Activity) context).isFinishing()) {
+                //show dialog
+                progressDialog.show();
+            }
+
+            if (progressDialog.getWindow() != null) {
+                progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            }
+            progressDialog.setContentView(R.layout.progress_dialog);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
+            return progressDialog;
+        }
+        return null;
+    }
 }
